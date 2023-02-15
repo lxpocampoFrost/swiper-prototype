@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Page Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1"  />
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="../assets/css/design-system.css" />
+    <link rel="stylesheet" href="../assets/css/component-guide.css" />
+    <!-- Add the slick-theme.css if you want default styling -->
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.css"/>
+    <!-- Add the slick-theme.css if you want default styling -->
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick-theme.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
+  </head>
+
+  <body>
+    <!-- <script src="../assets/detect.min.js" type="text/javascript"></script> -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script
+  src="https://code.jquery.com/jquery-3.6.3.min.js"
+  integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+  crossorigin="anonymous"></script>
+    <script>
+      $('.adp-marker').attr('src', 'https://uploads-ssl.webflow.com/6385b55675a0bd614777a5c1/63a40f484cbb3c8173c28eb7_map-marker.svg');
+      /**
+       * @license
+       * Copyright 2019 Google LLC. All Rights Reserved.
+       * SPDX-License-Identifier: Apache-2.0
+       */
+      function initMap() {
+        const directionsRenderer = new google.maps.DirectionsRenderer();
+        const directionsService = new google.maps.DirectionsService();
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 10,
+          center: { lat: 14.40, lng: 121.03 },
+          disableDefaultUI: true,
+          styles: [
+            {
+            "featureType": "poi",
+            "stylers": [
+              { "visibility": "off" }
+            ]
+            },
+          ]
+        });
+
+        directionsRenderer.setMap(map);
+        // directionsRenderer.setPanel(document.getElementById("sidebar"));
+
+        const control = document.getElementById("floating-panel");
+
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
+
+        const onChangeHandler = function () {
+          calculateAndDisplayRoute(directionsService, directionsRenderer);
+        };
+
+        document
+          .getElementById("start")
+          .addEventListener("change", onChangeHandler);
+        document
+          .getElementById("end")
+          .addEventListener("change", onChangeHandler);
+        document
+          .getElementById("mode")
+          .addEventListener("change", onChangeHandler);
+
+
+        $('.see-directions').on('click', function() {
+        	let directionsBtn = $(this);
+        	let endInput = $('#end');
+          let sidebarLocation = $('.sidebar-location').children('.location');
+          let sidebarAddress = $('.sidebar-location').children('.address');
+          let startLocation = $('.starting-point .highlight.start-address');
+
+          startLocation.text
+
+          sidebarAddress.addClass('')
+
+          sidebarLocation.text(directionsBtn.siblings('.location').text());
+          sidebarAddress.text(directionsBtn.siblings('.address').text());
+        	endInput.focus().attr('value', directionsBtn.siblings('.address').text()).blur();
+          onChangeHandler();
+        });
+      }      
+
+      function renderRoutes(directions) {
+        $('#steps-sidebar').empty();
+        directions.forEach((direction) => {
+          $('#steps-sidebar').append(
+            `
+            <div class="steps">
+              <div class="adp-maneuver-icon adp-${direction.maneuver}"></div>
+              <div class="content">
+                <p class="instructions">${direction.instructions}</p>
+                <span class="distance">${direction.distance.value}m</span>
+              </div>
+            </div>
+            `
+          );
+        });
+      }
+
+      function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+        const start = document.getElementById("start").value;
+        const end = document.getElementById("end").value;
+        const selectedMode = document.getElementById("mode").value;
+        const data = null;
+
+        directionsService
+          .route({
+            origin: start,
+            destination: end,
+            travelMode: google.maps.TravelMode[selectedMode],
+          })
+          .then((response) => {
+            directionsRenderer.setDirections(response);
+            let directions = directionsRenderer.getDirections()
+            console.log(directions.routes[0].legs[0].steps);
+            renderRoutes(directions.routes[0].legs[0].steps);
+          })
+          .catch((e) =>
+            window.alert("Directions request failed due to " + status)
+          );
+      }
+
+      window.initMap = initMap;
+    </script>
+    <style>
+    .swiper {
+        width: 100%;
+        height: 300px;
+    }
+
+    .swiper-slide {
+        width: auto;
+        background-color: antiquewhite;
+    }
+
+    .swiper-slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .swiper-slide {
+        width: auto;
+        height: auto;
+    }
+
+    .swiper-wrapper {
+        display: flex;
+    }
+
+    .swiper-wrapper.disabled {
+        position: relative;
+        left: 50%;
+        transform: translate3d(50%, 0, 0) !important;
+    }
+    
+</style>
+
+<div style="overflow: hidden;">
+    <!-- Slider main container -->
+    <div class="swiper">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper">
+            <!-- Slides -->
+            <div class="swiper-slide">
+                <div class="box-type" style="width: 340px; height: 400px; background-color: antiquewhite;"></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="box-type" style="width: 340px; height: 400px; background-color: antiquewhite;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slider main container -->
+    <div class="swiper-2">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper">
+            <!-- Slides -->
+            <div class="swiper-slide">
+                <div class="box-type" style="width: 320px; height: 400px; background-color: aqua;"></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="box-type" style="width: 320px; height: 400px; background-color: aqua;"></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="box-type" style="width: 320px; height: 400px; background-color: aqua;"></div>
+            </div>
+            <div class="swiper-slide">
+                <div class="box-type" style="width: 320px; height: 400px; background-color: aqua;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+<script>
+    var swiper = new Swiper(".swiper", {
+        slidesPerView: "auto",
+        watchOverflow: true,
+        centeredSlides: true,
+        spaceBetween: 24,
+        initialSlide: 1,
+        loop: false,
+    });
+
+    var swiper = new Swiper(".swiper-2", {
+        slidesPerView: "auto",
+        centeredSlides: true,
+        spaceBetween: 24,
+        initialSlide: 1,
+        loop: false,
+    });
+</script>
+    <script src="../assets/js/app.js" type="text/javascript"></script>
+    
+    <!-- <script>
+
+      let ua = detect.parse(navigator.userAgent);
+      let button = document.getElementById('download');
+      let title = document.getElementById('title');
+      let description = document.getElementById('description');
+
+      console.log(ua.os.family);
+
+
+      switch(ua.os.family.toLowerCase()) {
+        case 'android': 
+          button.setAttribute('href', 'http://play.google.com?id=*');
+          title.innerHTML = 'You are on android'
+          description.innerHTML = '<a> href: http://play.google.com?id=*'
+          break;
+        case 'iOS': 
+          button.setAttribute('href', 'https://appstore.com/')
+          title.innerHTML = 'You are on iOS'
+          description.innerHTML = '<a> href: https://appstore.com/'
+          break;
+        case 'windows':
+          console.log("You are using windows!!");
+          title.innerHTML = 'You are on windows';
+          description.innerHTML = '<a> href: #'
+          break;
+        default: 
+          button.setAttribute('href', '#')
+          title.innerHTML = 'Unknown family of OS'
+          description.innerHTML = '<a> href: #'
+      }
+    </script> -->
+  </body>
+</html>
